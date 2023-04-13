@@ -86,11 +86,14 @@ class MainMenu(QMainWindow):
             self.show_dialog_input_file_name()
             func.file_name = self.file_name
             func.output_path = self.show_dialog_select_folder()
-            func.reader(self.target_folder)
-            if func.count == 0:
-                self.finish_message(0)
+            if func.file_name is not None and func.output_path is not None:
+                func.reader(self.target_folder)
+                if func.count == 0:
+                    self.finish_message(0)
+                else:
+                    self.finish_message(func.count)
             else:
-                self.finish_message(func.count)
+                self.finish_message(-1)
         else:
             self.finish_message(-1)
             
@@ -99,7 +102,7 @@ class MainMenu(QMainWindow):
         if count == 0:
             QMessageBox.warning(self, "Error", "No supported image found in your folder!")
         elif count == -1:
-            QMessageBox.warning(self, "Error", "Please select a folder")
+            QMessageBox.warning(self, "Error", "Please select a folder or specify the file name!")
         else:
             QMessageBox.information(self, "Notice", "%d image(s) have been counted" % count)
         
