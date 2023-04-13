@@ -1,7 +1,7 @@
 import exif_read_module
 
 from PyQt5 import QtCore
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtWidgets import QFileDialog, QMainWindow,QVBoxLayout, QPushButton, QWidget, QMessageBox, QLabel, QLineEdit, QDialog, QDialogButtonBox
 
 class FileNameInput(QDialog):
@@ -43,12 +43,12 @@ class MainMenu(QMainWindow):
         self.setWindowIcon(QIcon('D:\Projects\photograph_journey\icon.png'))
 
         self.button_sel = QPushButton("Select Folder")
+        self.button_sel.setFont(QFont('Arial'))
         self.button_start = QPushButton("Start Counting")
+        self.button_start.setFont(QFont('Arial'))
         self.display_folder = QLabel("No Folder Selected")
 
-        self.font = self.display_folder.font()
-        self.font.setPointSize(12)
-        self.display_folder.setFont(self.font)
+        self.display_folder.setFont(QFont('Arial', 12))
         self.display_folder.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
         self.button_sel.clicked.connect(self.the_botton_sel_clicked)
