@@ -4,7 +4,7 @@ from PyQt5 import QtCore
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtWidgets import QFileDialog, QMainWindow,QVBoxLayout, QPushButton, QWidget, QMessageBox, QLabel, QLineEdit, QDialog, QDialogButtonBox, QTextBrowser
 
-class FileNameInput(QDialog):
+class FileNameInputWindow(QDialog):
     def __init__(self):
         super().__init__()
 
@@ -31,7 +31,7 @@ class FileNameInput(QDialog):
     def text_edited(self, s):
         self.filename = s
 
-class ReadMainWindow(QDialog):
+class ReaderMenu(QDialog):
     def __init__(self, fn, op, tf):
         super().__init__()
         self.setWindowTitle("Analyze Status")
@@ -74,8 +74,8 @@ class MainMenu(QMainWindow):
         self.setWindowTitle("PhotoJourney")
         self.setWindowIcon(QIcon('D:\Projects\photograph_journey\icon.png'))
 
-        self.button_sel = QPushButton("Select Folder")
-        self.button_sel.setFont(QFont('Arial'))
+        self.button_sel_folder = QPushButton("Select Folder")
+        self.button_sel_folder.setFont(QFont('Arial'))
         self.button_start = QPushButton("Start Counting")
         self.button_start.setFont(QFont('Arial'))
         self.display_folder = QLabel("No Folder Selected")
@@ -83,13 +83,13 @@ class MainMenu(QMainWindow):
         self.display_folder.setFont(QFont('Arial', 12))
         self.display_folder.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
-        self.button_sel.clicked.connect(self.the_botton_sel_clicked)
+        self.button_sel_folder.clicked.connect(self.the_botton_sel_clicked)
         self.button_start.clicked.connect(self.the_botton_start_clicked)
 
         self.file_been_read = None
 
         self.layout = QVBoxLayout()
-        self.layout.addWidget(self.button_sel)
+        self.layout.addWidget(self.button_sel_folder)
         self.layout.addWidget(self.display_folder)
         self.layout.addWidget(self.button_start)
 
@@ -99,16 +99,16 @@ class MainMenu(QMainWindow):
         self.setCentralWidget(self.widget)
         
 
-    def show_dialog_select_folder(self):
+    def select_folder(self):
         folder = QFileDialog.getExistingDirectory(self, 'Open Folder', "C:\\", QFileDialog.ShowDirsOnly)
         return folder
     
     def the_botton_sel_clicked(self):
-        self.target_folder= self.show_dialog_select_folder()
+        self.target_folder= self.select_folder()
         self.display_folder.setText("Selected Folder: %s" % self.target_folder)
 
-    def show_dialog_input_file_name(self):
-        dlg = FileNameInput()
+    def name_file(self):
+        dlg = FileNameInputWindow()
         if dlg.exec():
             return dlg.filename
 
@@ -116,23 +116,23 @@ class MainMenu(QMainWindow):
     def the_botton_start_clicked(self):
         # func = exif_read_module.exif_reader()
         if self.target_folder is not None:
-            file_name = self.show_dialog_input_file_name()
-            output_folder = self.show_dialog_select_folder()
-            func = ReadMainWindow(file_name, output_folder, self.target_folder)
-            if func.file_name is not None and func.output_path is not None:
-                if func.exec():
-                    if func.func.count == 0:
-                        self.finish_message(0)
+            file_name = self.name_file()
+            output_folder = self.select_folder()
+            reader_menu = ReaderMenu(file_name, output_folder, self.target_folder)
+            if reader_menu.file_name is not None and reader_menu.output_path is not None:
+                if reader_menu.exec():
+                    if reader_menu.func.count == 0:
+                        self.notice(0)
                     else:
-                        self.finish_message(func.func.count)
+                        self.notice(reader_menu.func.count)
             else:
-                self.finish_message(-1)
+                self.notice(-1)
         else:
-            self.finish_message(-1)
+            self.notice(-1)
             
 
 
-    def finish_message(self, count):
+    def notice(self, count):
         if count == 0:
             QMessageBox.warning(self, "Error", "No supported image found in your folder!")
         elif count == -1:
