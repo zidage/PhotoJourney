@@ -2,12 +2,14 @@ import exifread
 import os
 import csv
 
+
 class exif_reader:
 
-    def __init__(self):
+    def __init__(self, cl, fn, op):
         self.count = 0
-        self.file_name = None
-        self.output_path = None
+        self.file_name = fn
+        self.output_path = op
+        self.client = cl
 
     def find_file(self, curr_path, csv_writer, types):
         files = os.listdir(curr_path)
@@ -25,8 +27,8 @@ class exif_reader:
                         focal_length = eval(str(tags["EXIF FocalLength"]))
                         aperture_val = eval(str(tags["EXIF FNumber"]))
                         csv_writer.writerow([focal_length, aperture_val])
-                        print(file_type[1:]+"文件："+curr_file_path+" 解析结果：\n焦距：" +
-                            str(focal_length)+"mm        光圈f/"+str(aperture_val))
+                        self.client.browser_label.append(str(file_type[1:]+"文件："+curr_file_path+" 解析结果：\n焦距：" +
+                            str(focal_length)+"mm        光圈f/"+str(aperture_val)))
                         self.count += 1
                         
 
@@ -42,3 +44,4 @@ class exif_reader:
         csv_writer.writerow(["焦段", "光圈"])
 
         self.find_file(path, csv_writer, types)
+        self.client.browser_label.append('Done!')

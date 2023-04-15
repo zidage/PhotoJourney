@@ -2,7 +2,7 @@ import exif_read_module
 
 from PyQt5 import QtCore
 from PyQt5.QtGui import QIcon, QFont
-from PyQt5.QtWidgets import QFileDialog, QMainWindow,QVBoxLayout, QPushButton, QWidget, QMessageBox, QLabel, QLineEdit, QDialog, QDialogButtonBox
+from PyQt5.QtWidgets import QFileDialog, QMainWindow,QVBoxLayout, QPushButton, QWidget, QMessageBox, QLabel, QLineEdit, QDialog, QDialogButtonBox, QTextBrowser
 
 class FileNameInput(QDialog):
     def __init__(self):
@@ -31,13 +31,45 @@ class FileNameInput(QDialog):
     def text_edited(self, s):
         self.filename = s
 
+class ReadMainWindow(QDialog):
+    def __init__(self, fn, op, tf):
+        super().__init__()
+        self.setWindowTitle("Analyze Status")
+
+        self.target_folder = tf
+        self.file_name = fn
+        self.output_path = op
+        self.func = exif_read_module.exif_reader(self, self.file_name, self.output_path)
+
+        self.label = QLabel("The file being read:")
+        self.label.setFont(QFont('Arial'))
+        self.button_start = QPushButton("Start")
+        self.browser_label = QTextBrowser()
+
+        self.button = QDialogButtonBox.Ok
+        self.buttonBox = QDialogButtonBox(self.button)
+        self.buttonBox.accepted.connect(self.accept)
+
+        self.button_start.clicked.connect(self.button_clicked)
+
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self.label)
+        self.layout.addWidget(self.button_start)
+        self.layout.addWidget(self.browser_label)
+        self.layout.addWidget(self.buttonBox)
+        self.setLayout(self.layout)
+        self.setFixedSize(QtCore.QSize(1024, 768))
+
+    def button_clicked(self):
+        self.func.reader(self.target_folder)
+
+
 
 class MainMenu(QMainWindow):
     def __init__(self):
         super().__init__()
         
         self.target_folder = None
-        self.file_name = None
 
         self.setWindowTitle("PhotoJourney")
         self.setWindowIcon(QIcon('D:\Projects\photograph_journey\icon.png'))
@@ -54,6 +86,7 @@ class MainMenu(QMainWindow):
         self.button_sel.clicked.connect(self.the_botton_sel_clicked)
         self.button_start.clicked.connect(self.the_botton_start_clicked)
 
+        self.file_been_read = None
 
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.button_sel)
@@ -77,26 +110,27 @@ class MainMenu(QMainWindow):
     def show_dialog_input_file_name(self):
         dlg = FileNameInput()
         if dlg.exec():
-            self.file_name = dlg.filename
+            return dlg.filename
 
 
     def the_botton_start_clicked(self):
-        func = exif_read_module.exif_reader()
+        # func = exif_read_module.exif_reader()
         if self.target_folder is not None:
-            self.show_dialog_input_file_name()
-            func.file_name = self.file_name
-            func.output_path = self.show_dialog_select_folder()
+            file_name = self.show_dialog_input_file_name()
+            output_folder = self.show_dialog_select_folder()
+            func = ReadMainWindow(file_name, output_folder, self.target_folder)
             if func.file_name is not None and func.output_path is not None:
-                func.reader(self.target_folder)
-                if func.count == 0:
-                    self.finish_message(0)
-                else:
-                    self.finish_message(func.count)
+                if func.exec():
+                    if func.func.count == 0:
+                        self.finish_message(0)
+                    else:
+                        self.finish_message(func.func.count)
             else:
                 self.finish_message(-1)
         else:
             self.finish_message(-1)
             
+
 
     def finish_message(self, count):
         if count == 0:
