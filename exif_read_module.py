@@ -27,21 +27,19 @@ class exif_reader:
                         focal_length = eval(str(tags["EXIF FocalLength"]))
                         aperture_val = eval(str(tags["EXIF FNumber"]))
                         csv_writer.writerow([focal_length, aperture_val])
-                        self.client.browser_label.append(str(file_type[1:]+"文件："+curr_file_path+" 解析结果：\n焦距：" +
-                            str(focal_length)+"mm        光圈f/"+str(aperture_val)))
+                        self.client.browser_label.append(str(file_type[1:]+"Image File:"+curr_file_path+" Result:\nFocal Length: " +
+                            str(focal_length)+"mm        Aperture: f/"+str(aperture_val)))
                         self.count += 1
                         
 
     def reader(self, path):
         types = ['.JPG', '.jpg', '.NEF', '.ARW',
                 '.CR2', '.CR3', '.tif', '.dng']
-        #if not os.path.exists(path+"\\output"):
-            #os.mkdir("output")
         
         csv_file = open(self.output_path + '\\%s.csv' % self.file_name,
                         'w+', encoding='utf-8', newline='')
         csv_writer = csv.writer(csv_file)
-        csv_writer.writerow(["焦段", "光圈"])
+        csv_writer.writerow(["Focal Length", "Aperture F Number"])
 
         self.find_file(path, csv_writer, types)
         self.client.browser_label.append('Done!')
