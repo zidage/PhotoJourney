@@ -45,6 +45,7 @@ class ReaderMenu(QDialog):
         self.label.setFont(QFont('Arial'))
         self.button_start = QPushButton("Start")
         self.browser_label = QTextBrowser()
+        self.browser_label.setFont(QFont('Arial'))
 
         self.button = QDialogButtonBox.Ok
         self.buttonBox = QDialogButtonBox(self.button)

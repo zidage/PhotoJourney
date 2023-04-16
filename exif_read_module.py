@@ -27,7 +27,7 @@ class exif_reader:
                         focal_length = eval(str(tags["EXIF FocalLength"]))
                         aperture_val = eval(str(tags["EXIF FNumber"]))
                         csv_writer.writerow([focal_length, aperture_val])
-                        self.client.browser_label.append(str(file_type[1:]+"Image File:"+curr_file_path+" Result:\nFocal Length: " +
+                        self.client.browser_label.append(str(file_type[1:]+" Image File:"+curr_file_path+" Analyzed!\nResult:\nFocal Length: " +
                             str(focal_length)+"mm        Aperture: f/"+str(aperture_val)))
                         self.count += 1
                         
