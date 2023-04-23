@@ -1,8 +1,10 @@
 import exif_read_module
 
+from math import pow
+
 from PyQt5 import QtCore
 from PyQt5.QtGui import QIcon, QFont
-from PyQt5.QtWidgets import QFileDialog, QMainWindow,QVBoxLayout, QPushButton, QWidget, QMessageBox, QLabel, QLineEdit, QDialog, QDialogButtonBox, QTextBrowser
+from PyQt5.QtWidgets import QFileDialog, QMainWindow,QVBoxLayout, QPushButton, QWidget, QMessageBox, QLabel, QLineEdit, QDialog, QDialogButtonBox, QTextBrowser, QCheckBox
 
 class FileNameInputWindow(QDialog):
     def __init__(self):
@@ -32,7 +34,7 @@ class FileNameInputWindow(QDialog):
         self.filename = s
 
 class ReaderMenu(QDialog):
-    def __init__(self, fn, op, tf):
+    def __init__(self, fn, op, tf, opt):
         super().__init__()
         self.setWindowTitle("Analyze Status")
 
@@ -42,10 +44,8 @@ class ReaderMenu(QDialog):
         self.func = exif_read_module.exif_reader(self, self.file_name, self.output_path)
 
         self.label = QLabel("The file being read:")
-        self.label.setFont(QFont('Arial'))
         self.button_start = QPushButton("Start")
         self.browser_label = QTextBrowser()
-        self.browser_label.setFont(QFont('Arial'))
 
         self.button = QDialogButtonBox.Ok
         self.buttonBox = QDialogButtonBox(self.button)
@@ -76,13 +76,36 @@ class MainMenu(QMainWindow):
         self.setWindowIcon(QIcon('D:\Projects\photograph_journey\icon.png'))
 
         self.button_sel_folder = QPushButton("Select Folder")
-        self.button_sel_folder.setFont(QFont('Arial'))
         self.button_start = QPushButton("Start Counting")
-        self.button_start.setFont(QFont('Arial'))
         self.display_folder = QLabel("No Folder Selected")
 
-        self.display_folder.setFont(QFont('Arial', 12))
         self.display_folder.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+
+        self.metadata_label = QLabel("Please choose the metadata you want to analyze.")
+
+        self.check_status = [1, 1, 1, 1]
+
+        self.checkbox_layout = QVBoxLayout()
+        self.sel_focal = QCheckBox("Focal Length")
+        self.sel_focal.setCheckState(QtCore.Qt.Checked)
+        self.sel_focal.stateChanged.connect(lambda: self.change_state(self.sel_focal.isChecked(), 0))
+
+        self.sel_aperature = QCheckBox("F Stops")
+        self.sel_aperature.setCheckState(QtCore.Qt.Checked)
+        self.sel_aperature.stateChanged.connect(lambda: self.change_state(self.sel_aperature.isChecked(), 1))
+
+        self.sel_camera = QCheckBox("Camera Model")
+        self.sel_camera.setCheckState(QtCore.Qt.Checked)
+        self.sel_camera.stateChanged.connect(lambda: self.change_state(self.sel_camera.isChecked(), 2))
+
+        self.sel_lensmodel = QCheckBox("Lens Model")
+        self.sel_lensmodel.setCheckState(QtCore.Qt.Checked)
+        self.sel_lensmodel.stateChanged.connect(lambda: self.change_state(self.sel_lensmodel.isChecked(), 3))
+
+        self.checkbox_layout.addWidget(self.sel_focal)
+        self.checkbox_layout.addWidget(self.sel_aperature)
+        self.checkbox_layout.addWidget(self.sel_camera)
+        self.checkbox_layout.addWidget(self.sel_lensmodel)
 
         self.button_sel_folder.clicked.connect(self.the_botton_sel_clicked)
         self.button_start.clicked.connect(self.the_botton_start_clicked)
@@ -91,6 +114,8 @@ class MainMenu(QMainWindow):
 
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.button_sel_folder)
+        self.layout.addWidget(self.metadata_label)
+        self.layout.addLayout(self.checkbox_layout)
         self.layout.addWidget(self.display_folder)
         self.layout.addWidget(self.button_start)
 
@@ -115,11 +140,20 @@ class MainMenu(QMainWindow):
 
 
     def the_botton_start_clicked(self):
-        # func = exif_read_module.exif_reader()
+        
+        def bin2dec(arr):
+            n = 0
+            for i in range(0, 4):
+                n += arr[i] * pow(2, i)
+            return n
+
+
         if self.target_folder is not None:
             file_name = self.name_file()
             output_folder = self.select_folder()
-            reader_menu = ReaderMenu(file_name, output_folder, self.target_folder)
+            opt = int(bin2dec(self.check_status))
+            print(opt)
+            reader_menu = ReaderMenu(file_name, output_folder, self.target_folder, opt)
             if reader_menu.file_name is not None and reader_menu.output_path is not None:
                 if reader_menu.exec():
                     if reader_menu.func.count == 0:
@@ -135,10 +169,12 @@ class MainMenu(QMainWindow):
 
     def notice(self, count):
         if count == 0:
-            QMessageBox.warning(self, "Error", "No supported image found in your folder!")
+            QMessageBox.warning(self, "Error", "No supported image in your folder!")
         elif count == -1:
-            QMessageBox.warning(self, "Error", "Please select a folder or specify the file name!")
+            QMessageBox.warning(self, "Error", "Please select a folder or name the output file!")
         else:
             QMessageBox.information(self, "Notice", "%d image(s) have been counted" % count)
         
-
+    def change_state(self, s, n):
+        self.check_status[n] = s
+        print(self.check_status[n])
