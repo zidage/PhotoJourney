@@ -5,13 +5,15 @@ import csv
 
 class exif_reader:
 
-    def __init__(self, cl, fn, op):
+    def __init__(self, cl, fn, op, opt):
         self.count = 0
         self.file_name = fn
         self.output_path = op
         self.client = cl
+        self.option = opt
 
-    def find_file(self, curr_path, csv_writer, types):
+
+    def find_file(self, curr_path, csv_writer, types, desired_metadata):
         files = os.listdir(curr_path)
         for file in files:
             if os.path.isdir(curr_path+'\\'+file):
@@ -26,20 +28,58 @@ class exif_reader:
                     if "EXIF FocalLength" in tags:
                         focal_length = eval(str(tags["EXIF FocalLength"]))
                         aperture_val = eval(str(tags["EXIF FNumber"]))
-                        csv_writer.writerow([focal_length, aperture_val])
-                        self.client.browser_label.append(str(file_type[1:]+" Image File:"+curr_file_path+" Analyzed!\nResult:\nFocal Length: " +
-                            str(focal_length)+"mm        Aperture: f/"+str(aperture_val)))
+                        
+                        
+                        metadata_set = []
+                        analyze_message = ""
+                        if "Focal Length" in desired_metadata:
+                            metadata_set.append(focal_length)
+                            analyze_message += ("Focal Length: " + str(focal_length) + "mm ")
+                        if "Aperture F Stop" in desired_metadata:
+                            metadata_set.append(aperture_val)
+                            analyze_message += ("f:/" + str(aperture_val) + " ")
+                        if "Camera Model" in desired_metadata:
+                            if "Image Make" in tags and "Image Model" in tags:
+                                camera_model = str(tags["Image Make"]) + " " + str(tags["Image Model"])
+                                metadata_set.append(camera_model)
+                                analyze_message += ("Camera: " + camera_model + " ")
+                        if "Lens Model" in desired_metadata:
+                            if "EXIF LensModel" in tags:
+                                lens_model = str(tags["EXIF LensModel"])
+                                metadata_set.append(lens_model)
+                                analyze_message += ("Lens: " + lens_model)
+
+                        csv_writer.writerow(metadata_set)
+                        self.client.browser_label.append(str(file_type[1:]+" File:" + curr_file_path + " Analyzed!\nResult:\n" + analyze_message + "\n"))
                         self.count += 1
+                    
+                    else:
+                        self.client.browser_label.append("No valid metadata in files!\n")
                         
 
     def reader(self, path):
         types = ['.JPG', '.jpg', '.NEF', '.ARW',
                 '.CR2', '.CR3', '.tif', '.dng']
         
+        metadata = ["Focal Length", "Aperture F Stop", "Camera Model", "Lens Model"]
+
+        desired_metadata = []
+
+        option = self.option
+
+        i = 1
+        j = 0
+        while i <= 8:
+            if i & option:
+                desired_metadata.append(metadata[j])
+            j += 1
+            i = i << 1
+
+
         csv_file = open(self.output_path + '\\%s.csv' % self.file_name,
                         'w+', encoding='utf-8', newline='')
         csv_writer = csv.writer(csv_file)
-        csv_writer.writerow(["Focal Length", "Aperture F Number"])
+        csv_writer.writerow(desired_metadata)
 
-        self.find_file(path, csv_writer, types)
+        self.find_file(path, csv_writer, types, desired_metadata)
         self.client.browser_label.append('Done!')
