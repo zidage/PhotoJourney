@@ -95,19 +95,19 @@ class MainMenu(QMainWindow):
         self.checkbox_layout = QVBoxLayout()
         self.sel_focal = QCheckBox("Focal Length")
         self.sel_focal.setCheckState(QtCore.Qt.Checked)
-        self.sel_focal.stateChanged.connect(lambda: self.change_state(self.sel_focal.isChecked(), 3))
+        self.sel_focal.stateChanged.connect(lambda: self.change_state(self.sel_focal.isChecked(), 0))
 
         self.sel_aperature = QCheckBox("F Stops")
         self.sel_aperature.setCheckState(QtCore.Qt.Checked)
-        self.sel_aperature.stateChanged.connect(lambda: self.change_state(self.sel_aperature.isChecked(), 2))
+        self.sel_aperature.stateChanged.connect(lambda: self.change_state(self.sel_aperature.isChecked(), 1))
 
         self.sel_camera = QCheckBox("Camera Model")
         self.sel_camera.setCheckState(QtCore.Qt.Checked)
-        self.sel_camera.stateChanged.connect(lambda: self.change_state(self.sel_camera.isChecked(), 1))
+        self.sel_camera.stateChanged.connect(lambda: self.change_state(self.sel_camera.isChecked(), 2))
 
         self.sel_lensmodel = QCheckBox("Lens Model")
         self.sel_lensmodel.setCheckState(QtCore.Qt.Checked)
-        self.sel_lensmodel.stateChanged.connect(lambda: self.change_state(self.sel_lensmodel.isChecked(), 0))
+        self.sel_lensmodel.stateChanged.connect(lambda: self.change_state(self.sel_lensmodel.isChecked(), 3))
 
         self.checkbox_layout.addWidget(self.sel_focal)
         self.checkbox_layout.addWidget(self.sel_aperature)
