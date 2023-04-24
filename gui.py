@@ -13,7 +13,7 @@ class FileNameInputWindow(QDialog):
 
         self.setWindowTitle("Enter the file name")
         
-        self.label = QLabel("Please enter the name for the output file,\nthen select the path for the file in the following window")
+        self.label = QLabel("Please enter the name for the output file,\nthen select the output path in the following window")
 
         self.line_edit = QLineEdit()
         self.line_edit.textEdited.connect(self.text_edited)
@@ -50,7 +50,9 @@ class ReaderMenu(QDialog):
 
         self.label = QLabel("The file being read:")
         self.button_start = QPushButton("Start")
+        self.browser_font = QFont("cascadia code", 8)
         self.browser_label = QTextBrowser()
+        self.browser_label.setFont(self.browser_font)
 
         self.button = QDialogButtonBox.Ok
         self.buttonBox = QDialogButtonBox(self.button)

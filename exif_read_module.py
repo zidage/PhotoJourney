@@ -36,7 +36,7 @@ class exif_reader:
                         if "EXIF FNumber" in tags:
                             aperture_val = eval(str(tags["EXIF FNumber"]))
                             metadata_set.append(aperture_val)
-                            analyze_message += ("f:/" + str(aperture_val) + " ")
+                            analyze_message += ("Aperature: f:/" + str(aperture_val) + " ")
                     if "Camera Model" in desired_metadata:
                         if "Image Make" in tags and "Image Model" in tags:
                             camera_model = str(tags["Image Make"]) + " " + str(tags["Image Model"])
@@ -57,7 +57,7 @@ class exif_reader:
                     else:
                         self.client.browser_label.append("No valid metadata in file: %s!\n" % curr_file_path)
                         QApplication.processEvents()
-                        
+
 
     def reader(self, path):
         types = ['.JPG', '.jpg', '.NEF', '.ARW',
