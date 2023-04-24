@@ -64,7 +64,7 @@ class ReaderMenu(QDialog):
         self.layout.addWidget(self.browser_label)
         self.layout.addWidget(self.buttonBox)
         self.setLayout(self.layout)
-        self.setFixedSize(QtCore.QSize(1024, 768))
+        self.setFixedSize(QtCore.QSize(1280, 768))
 
     def button_clicked(self):
         self.func.reader(self.target_folder)

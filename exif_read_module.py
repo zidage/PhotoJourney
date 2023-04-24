@@ -1,7 +1,7 @@
 import exifread
 import os
 import csv
-
+from PyQt5.QtWidgets import QApplication
 
 class exif_reader:
 
@@ -51,10 +51,12 @@ class exif_reader:
                     if len(metadata_set) > 0:
                         csv_writer.writerow(metadata_set)
                         self.client.browser_label.append(str(file_type[1:]+" File:" + curr_file_path + " Analyzed!\nResult:\n" + analyze_message + "\n"))
+                        QApplication.processEvents()
                         self.count += 1
                     
                     else:
                         self.client.browser_label.append("No valid metadata in file: %s!\n" % curr_file_path)
+                        QApplication.processEvents()
                         
 
     def reader(self, path):
