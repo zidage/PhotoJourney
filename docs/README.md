@@ -10,7 +10,7 @@ PhotoJourney is a batch image EXIF metadata export tool in Python. Search throug
 
 Get to know what are your frequently used focal length, aperture value, camera model and lens model. 
 
-Getting metadata from a single image file is simple, but it could be hard when you want to get all the metadata from whole bunch of files or scattered files in an organized folder structure since there are few programs providing such tool. 
+Getting metadata from a single image file is simple, but it could be hard when someone wants to get all the metadata from thousands of files or scattered files in an organized folder structure since there are few programs providing such tool that can automatically finish this process. 
 
 PhotoJourney provides a rudimentary implementation of this. PhotoJourney uses `exifread` module to extract user specified EXIF metadata from digital image files, including `TIFF, JPG, NEF, ARW, CR2, CR3, DNG`, and export the data into a `CSV` file. Then user can use a spreadsheet editor (e.g. `Microsoft Excel`) to analyze the data from the `CSV` file.
 
