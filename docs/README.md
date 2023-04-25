@@ -18,41 +18,41 @@ PhotoJourney provides a rudimentary implementation of this. PhotoJourney uses `e
 
 1. Click `PhotoJourney.exe` to run.
 
-![](/tutorial_screenshots/screenshot01.png)
+![](https://raw.githubusercontent.com/zidage/PhotoJourney/main/docs/tutorial_screenshots/screenshot01.png)
 
 2. Click `Select Folder` to select the folder you want to collect the metadata from. (support select the root folder of your image gallery)
 
-![](/tutorial_screenshots/screenshot02.png)
+![](https://raw.githubusercontent.com/zidage/PhotoJourney/main/docs/tutorial_screenshots/screenshot02.png)
 
 2. 1 Once the folder is selected, the path of it will be displayed on the label below.
 
-![](/tutorial_screenshots/screenshot03.png)
+![](https://raw.githubusercontent.com/zidage/PhotoJourney/main/docs/tutorial_screenshots/screenshot03.png)
 
 3. Then choose the metadata you want to contain in the output `CSV` file.
 
-![](/tutorial_screenshots/screenshot04.png)
+![](https://raw.githubusercontent.com/zidage/PhotoJourney/main/docs/tutorial_screenshots/screenshot04.png)
 
 4. Click `Start Counting`.
 
 5. Enter the file name for the output file in the following window.
 
-   ![](D:\Projects\photograph_journey\docs\tutorial_screenshots\screenshot05.png)
+   ![](https://raw.githubusercontent.com/zidage/PhotoJourney/main/docs/tutorial_screenshots/screenshot05.png)
 
 6. Select the path in which you want to store the output file.
 7. Click `Start`
 
-![](/tutorial_screenshots/screenshot06.png)
+![](https://raw.githubusercontent.com/zidage/PhotoJourney/main/docs/tutorial_screenshots/screenshot06.png)
 
 8. The current extract status will be displayed on the text browser below.
 
-![](/tutorial_screenshots/screenshot07.png)
+![](https://raw.githubusercontent.com/zidage/PhotoJourney/main/docs/tutorial_screenshots/screenshot07.png)
 
 Notice: DO NOT click `OK` until the `Done!` message appears.
 
 9. After the extract process ends, the total amount of the images in the folder will be displayed
 
-   ![](/tutorial_screenshots/screenshot08.png)
+   ![](https://raw.githubusercontent.com/zidage/PhotoJourney/main/docs/tutorial_screenshots/screenshot08.png)
 
 10. Then you can find the output file in the path just selected.
 
-    ![](/tutorial_screenshots/screenshot09.png)
+    ![](https://raw.githubusercontent.com/zidage/PhotoJourney/main/docs/tutorial_screenshots/screenshot09.png)
