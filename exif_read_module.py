@@ -69,14 +69,11 @@ class exif_reader:
 
         option = self.option
 
-        i = 1
         j = 0
-        while i <= 8:
-            if i & option:
+        for i in option:
+            if 1 & i:
                 desired_metadata.append(metadata[j])
             j += 1
-            i = i << 1
-
 
         csv_file = open(self.output_path + '\\%s.csv' % self.file_name,
                         'w+', encoding='utf-8', newline='')

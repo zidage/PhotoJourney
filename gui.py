@@ -158,9 +158,7 @@ class MainMenu(QMainWindow):
         if self.target_folder is not None:
             file_name = self.name_file()
             output_folder = self.select_folder()
-            opt = int(bin2dec(self.check_status))
-            print(opt)
-            reader_menu = ReaderMenu(file_name, output_folder, self.target_folder, opt)
+            reader_menu = ReaderMenu(file_name, output_folder, self.target_folder, self.check_status)
             if reader_menu.file_name is not None and reader_menu.output_path is not None:
                 if reader_menu.exec():
                     if reader_menu.func.count == 0:
