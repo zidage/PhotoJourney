@@ -82,3 +82,4 @@ class exif_reader:
 
         self.find_file(path, csv_writer, types, desired_metadata)
         self.client.browser_label.append('Done!')
+        self.client.buttonBox.setEnabled(True)

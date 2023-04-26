@@ -56,6 +56,7 @@ class ReaderMenu(QDialog):
 
         self.button = QDialogButtonBox.Ok
         self.buttonBox = QDialogButtonBox(self.button)
+        self.buttonBox.setEnabled(False)
         self.buttonBox.accepted.connect(self.accept)
 
         self.button_start.clicked.connect(self.button_clicked)
